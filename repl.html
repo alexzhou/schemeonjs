@@ -2,13 +2,34 @@
 <head>
 	<title></title>
 	<script type="text/javascript" src="scheme.js"></script>
-	<script type="text/javascript">
-		console.log(
-			Scheme.parse('(+ 1 2)')
-			);
-	</script>
+	<script type="text/javascript" src="terminal/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="terminal/jquery.terminal-min.js"></script>
+	<link rel="stylesheet" type="text/css" href="terminal/jquery.terminal.css">
 </head>
 <body>
-
+<div id="terminal" class="terminal" style="height: 200px;">
+</div>
+<script type="text/javascript">
+jQuery(function($, undefined) {
+    $('#terminal').terminal(function(command, term) {
+        if (command !== '') {
+            try {
+                var result = Scheme.eval(Scheme.parse(command),Scheme.global_env)
+                if (result !== undefined) {
+                    term.echo(new String(result));
+                }
+            } catch(e) {
+                term.error(new String(e));
+            }
+        } else {
+           term.echo('');
+        }
+    }, {
+        greetings: 'Scheme On JavaScript     The terminal build with http://terminal.jcubic.pl',
+        name: 'terminal',
+        height: 200,
+        prompt: 'Scheme> '});
+});
+</script>
 </body>
 </html>
